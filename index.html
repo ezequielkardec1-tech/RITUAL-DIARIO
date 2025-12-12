@@ -248,7 +248,7 @@
     </div>
 
     <footer>
-      Publique via GitHub Pages em Settings → Pages.
+     
     </footer>
   </div>
 
@@ -271,7 +271,7 @@ async function loadDays(){
 
     function renderDaily(){
       const now = new Date();
-      const doy = getDayOfYear(now);
+      const doy = Math.min(getDayOfYear(now), 365);
       if (!daysData.length) {
   $("dailyPhrase").textContent = "Carregando conteúdo…";
   $("dailyVerse").textContent = "";
