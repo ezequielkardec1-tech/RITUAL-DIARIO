@@ -145,12 +145,9 @@
           <button class="btn good" id="copyDaily">Copiar texto</button>
           <a class="btn primary" id="waShare" target="_blank" rel="noreferrer">WhatsApp</a>
           <button class="btn instagram" id="instaShare">Instagram</button>
-          <button class="btn" id="nextDemo" title="Só pra testar">Ver outro (demo)</button>
-        </div>
+         
 
-        <p class="small" style="margin-top:10px">
-          Agora está em modo demo (7 exemplos). Depois eu conecto seu JSON real (365 dias).
-        </p>
+       
       </section>
 
       <aside class="card">
@@ -270,7 +267,7 @@ async function loadDays(){
     }
     const $ = (id) => document.getElementById(id);
 
-    let demoOffset = 0;
+
 
     function renderDaily(){
       const now = new Date();
@@ -281,7 +278,7 @@ async function loadDays(){
   $("dailyRef").textContent = "";
   return;
 }
-const idx = ((doy - 1 + demoOffset) % daysData.length + daysData.length) % daysData.length;
+const idx = ((doy - 1) % daysData.length + daysData.length) % daysData.length;
 const item = daysData[idx];
 
       $("dayOfYear").textContent = Math.min(doy, 365);
@@ -313,7 +310,7 @@ Acesse: ${link}`;
       };
     }
 
-    $("nextDemo").onclick = () => { demoOffset++; renderDaily(); };
+   
 
     $("copyRitual").onclick = async () => {
       const t =
