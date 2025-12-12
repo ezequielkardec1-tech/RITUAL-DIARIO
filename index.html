@@ -256,15 +256,13 @@
   </div>
 
   <script>
-    const demoDays = [
-      { day: 1, phrase: "Hoje eu recomeço com fé e coragem.", verse: "O Senhor é a minha luz e a minha salvação; a quem temerei?", reference: "Salmos 27:1" },
-      { day: 2, phrase: "Eu escolho a paz, mesmo no meio do processo.", verse: "Deixo-vos a paz, a minha paz vos dou.", reference: "João 14:27" },
-      { day: 3, phrase: "Minha mente se aquieta, meu coração confia.", verse: "Aquietai-vos e sabei que Eu sou Deus.", reference: "Salmos 46:10" },
-      { day: 4, phrase: "Eu não caminho sozinho(a).", verse: "E eis que estou convosco todos os dias.", reference: "Mateus 28:20" },
-      { day: 5, phrase: "Eu permaneço constante: um dia de cada vez.", verse: "Não andeis ansiosos por coisa alguma.", reference: "Filipenses 4:6" },
-      { day: 6, phrase: "Eu sou luz em construção.", verse: "Levanta-te, resplandece, porque já vem a tua luz.", reference: "Isaías 60:1" },
-      { day: 7, phrase: "Tudo coopera para o meu bem.", verse: "Todas as coisas cooperam para o bem daqueles que amam a Deus.", reference: "Romanos 8:28" }
-    ];
+    let daysData = [];
+async function loadDays(){
+  const res = await fetch("./ritual_diario_content.json", { cache: "no-store" });
+  if (!res.ok) throw new Error("Não consegui carregar o JSON: " + res.status);
+  const data = await res.json();
+  daysData = Array.isArray(data) ? data : [];
+}
 
     function getDayOfYear(date){
       const start = new Date(date.getFullYear(), 0, 0);
@@ -277,8 +275,14 @@
     function renderDaily(){
       const now = new Date();
       const doy = getDayOfYear(now);
-      const idx = ((doy - 1 + demoOffset) % demoDays.length + demoDays.length) % demoDays.length;
-      const item = demoDays[idx];
+      if (!daysData.length) {
+  $("dailyPhrase").textContent = "Carregando conteúdo…";
+  $("dailyVerse").textContent = "";
+  $("dailyRef").textContent = "";
+  return;
+}
+const idx = ((doy - 1 + demoOffset) % daysData.length + daysData.length) % daysData.length;
+const item = daysData[idx];
 
       $("dayOfYear").textContent = Math.min(doy, 365);
       $("todayDate").textContent = now.toLocaleDateString("pt-BR", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
@@ -373,7 +377,18 @@ Teste você também: ${link}`;
 
     $("resetQuiz").onclick = () => { quizForm.reset(); quizResult.style.display = "none"; };
 
-    renderDaily();
+    (async () => {
+  try {
+    await loadDays();
+  } catch (e) {
+    console.error(e);
+    $("dailyPhrase").textContent = "Erro ao carregar o conteúdo (JSON).";
+    $("dailyVerse").textContent = "Confira se o arquivo ritual_diario_content.json está no repositório.";
+    $("dailyRef").textContent = "";
+    return;
+  }
+  renderDaily();
+})();
   </script>
 </body>
 </html>
