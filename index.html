@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ritual Diário</title>
+  <meta name="description" content="Frase e versículo do dia + quiz interativo de evolução espiritual." />
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --text:#e7eefc;
+      --muted:#a9b7d0;
+      --line: rgba(255,255,255,.10);
+      --shadow: 0 16px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", sans-serif;
+      background: radial-gradient(1000px 700px at 20% 0%, rgba(124,92,255,.18), transparent 55%),
+                  radial-gradient(900px 600px at 80% 10%, rgba(39,211,162,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    .wrap{max-width:980px;margin:0 auto;padding:26px 18px 60px}
+    header{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+      padding:18px 16px;border:1px solid var(--line);border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+    }
+    .brand h1{margin:0;font-size:22px;letter-spacing:.2px}
+    .brand p{margin:6px 0 0;color:var(--muted);font-size:14px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+    .chip{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      padding:8px 10px;border-radius:999px;font-size:12px;
+    }
+    .grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
+    @media(min-width:940px){
+      .grid{grid-template-columns: 1.15fr .85fr;}
+      .full{grid-column:1 / -1;}
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h2{margin:0 0 10px;font-size:16px}
+    .sub{color:var(--muted);font-size:13px;margin-top:-4px}
+    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+      background:rgba(255,255,255,.05);color:var(--text);
+      cursor:pointer;user-select:none; text-decoration:none;
+      font-weight:600;font-size:13px;
+    }
+    .btn:hover{border-color:rgba(255,255,255,.18)}
+    .btn.primary{background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.35)}
+    .btn.good{background:rgba(39,211,162,.14);border-color:rgba(39,211,162,.30)}
+    .btn.instagram{background:linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);border:none;color:#fff}
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .box{
+      padding:12px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(0,0,0,.16);
+    }
+    .box .label{color:var(--muted);font-size:12px}
+    .box .value{font-size:14px;font-weight:700;margin-top:4px}
+    .quote{
+      padding:14px;border-radius:16px;border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(17,24,38,.7), rgba(17,24,38,.35));
+    }
+    .phrase{font-size:18px;font-weight:800;margin:0 0 8px}
+    .verse{margin:0;opacity:.95}
+    .ref{margin:10px 0 0;color:var(--muted);font-size:13px}
+    .small{font-size:12px;color:var(--muted)}
+    .hr{height:1px;background:var(--line);margin:14px 0}
+    .q{padding:12px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.14);margin-top:10px}
+    .q h3{margin:0 0 8px;font-size:14px}
+    .opts{display:grid;gap:8px}
+    label.opt{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      cursor:pointer;
+    }
+    input[type="radio"]{margin-top:3px}
+    .result{
+      padding:14px;border-radius:16px;border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(124,92,255,.14), rgba(39,211,162,.06));
+      margin-top:12px;
+    }
+    footer{margin-top:16px;color:var(--muted);font-size:12px;text-align:center}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Ritual Diário</h1>
+        <p>Frase e versículo do dia + quiz interativo.</p>
+      </div>
+      <div class="chips">
+        <div class="chip">Tema escuro</div>
+        <div class="chip">Instagram + WhatsApp</div>
+        <div class="chip">Sem login</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Hoje: Frase & Versículo</h2>
+        <div class="sub">Atualiza automaticamente pelo dia do ano (1–365).</div>
+
+        <div class="hr"></div>
+
+        <div class="quote">
+          <p class="phrase" id="dailyPhrase">Carregando…</p>
+          <p class="verse" id="dailyVerse"></p>
+          <p class="ref" id="dailyRef"></p>
+        </div>
+
+        <div class="kpi">
+          <div class="box">
+            <div class="label">Dia do ano</div>
+            <div class="value"><span id="dayOfYear">—</span> / 365</div>
+          </div>
+          <div class="box">
+            <div class="label">Data</div>
+            <div class="value" id="todayDate">—</div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="row">
+          <button class="btn good" id="copyDaily">Copiar texto</button>
+          <a class="btn primary" id="waShare" target="_blank" rel="noreferrer">WhatsApp</a>
+          <button class="btn instagram" id="instaShare">Instagram</button>
+          <button class="btn" id="nextDemo" title="Só pra testar">Ver outro (demo)</button>
+        </div>
+
+        <p class="small" style="margin-top:10px">
+          Agora está em modo demo (7 exemplos). Depois eu conecto seu JSON real (365 dias).
+        </p>
+      </section>
+
+      <aside class="card">
+        <h2>Ritual (3–5 min)</h2>
+        <div class="sub">Mini rotina pra não desanimar.</div>
+        <div class="hr"></div>
+        <ol class="small" style="margin:0;padding-left:18px">
+          <li><b>Respira</b> 6 vezes (4s entra / 6s sai).</li>
+          <li>Mão no peito: <b>"Eu volto pra mim."</b></li>
+          <li>1 micro-ação hoje.</li>
+          <li>Afirmação: <b>"Deus guia meus passos. Eu continuo."</b></li>
+        </ol>
+        <div class="hr"></div>
+        <div class="row">
+          <button class="btn" id="copyRitual">Copiar ritual</button>
+        </div>
+      </aside>
+
+      <section class="card full">
+        <h2>Quiz: seu nível de evolução espiritual</h2>
+        <div class="sub">Responda e veja o resultado na hora.</div>
+
+        <form id="quizForm">
+          <div class="q">
+            <h3>1) Quando algo dá errado, o que você pensa primeiro?</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="q1" value="1" required> A) Nada dá certo.</label>
+              <label class="opt"><input type="radio" name="q1" value="2"> B) Tem aprendizado.</label>
+              <label class="opt"><input type="radio" name="q1" value="3"> C) Eu observo e entendo.</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <h3>2) Com que frequência você se conecta (oração/meditação/reflexão)?</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="q2" value="1" required> A) Quase nunca.</label>
+              <label class="opt"><input type="radio" name="q2" value="2"> B) Às vezes.</label>
+              <label class="opt"><input type="radio" name="q2" value="3"> C) Quase todo dia.</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <h3>3) Como você lida com emoções difíceis?</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="q3" value="1" required> A) Fujo.</label>
+              <label class="opt"><input type="radio" name="q3" value="2"> B) Oscilo.</label>
+              <label class="opt"><input type="radio" name="q3" value="3"> C) Acolho e transformo.</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <h3>4) Quando alguém te magoa…</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="q4" value="1" required> A) Remoo.</label>
+              <label class="opt"><input type="radio" name="q4" value="2"> B) Guardo um pouco.</label>
+              <label class="opt"><input type="radio" name="q4" value="3"> C) Busco liberar.</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <h3>5) Sobre propósito…</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="q5" value="1" required> A) Perdido(a).</label>
+              <label class="opt"><input type="radio" name="q5" value="2"> B) Chamado sem clareza.</label>
+              <label class="opt"><input type="radio" name="q5" value="3"> C) Alinhado(a).</label>
+            </div>
+          </div>
+
+          <div class="q">
+            <h3>6) Como você se vê?</h3>
+            <div class="opts">
+              <label class="opt"><input type="radio" name="q6" value="1" required> A) Não suficiente.</label>
+              <label class="opt"><input type="radio" name="q6" value="2"> B) Comparo.</label>
+              <label class="opt"><input type="radio" name="q6" value="3"> C) Luz em evolução.</label>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary" type="submit">Ver resultado</button>
+            <button class="btn" type="button" id="resetQuiz">Limpar</button>
+          </div>
+        </form>
+
+        <div class="result" id="quizResult" style="display:none">
+          <h3 id="resultTitle">Resultado</h3>
+          <div class="small">Pontuação: <span class="mono" id="resultScore">—</span> (6–18)</div>
+          <p id="resultText"></p>
+
+          <div class="hr"></div>
+
+          <div class="row">
+            <button class="btn good" id="copyResult">Copiar resultado</button>
+            <a class="btn primary" id="waShareResult" target="_blank" rel="noreferrer">WhatsApp</a>
+            <button class="btn instagram" id="instaShareResult">Instagram</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      Publique via GitHub Pages em Settings → Pages.
+    </footer>
+  </div>
+
+  <script>
+    const demoDays = [
+      { day: 1, phrase: "Hoje eu recomeço com fé e coragem.", verse: "O Senhor é a minha luz e a minha salvação; a quem temerei?", reference: "Salmos 27:1" },
+      { day: 2, phrase: "Eu escolho a paz, mesmo no meio do processo.", verse: "Deixo-vos a paz, a minha paz vos dou.", reference: "João 14:27" },
+      { day: 3, phrase: "Minha mente se aquieta, meu coração confia.", verse: "Aquietai-vos e sabei que Eu sou Deus.", reference: "Salmos 46:10" },
+      { day: 4, phrase: "Eu não caminho sozinho(a).", verse: "E eis que estou convosco todos os dias.", reference: "Mateus 28:20" },
+      { day: 5, phrase: "Eu permaneço constante: um dia de cada vez.", verse: "Não andeis ansiosos por coisa alguma.", reference: "Filipenses 4:6" },
+      { day: 6, phrase: "Eu sou luz em construção.", verse: "Levanta-te, resplandece, porque já vem a tua luz.", reference: "Isaías 60:1" },
+      { day: 7, phrase: "Tudo coopera para o meu bem.", verse: "Todas as coisas cooperam para o bem daqueles que amam a Deus.", reference: "Romanos 8:28" }
+    ];
+
+    function getDayOfYear(date){
+      const start = new Date(date.getFullYear(), 0, 0);
+      return Math.floor((date - start) / (1000*60*60*24));
+    }
+    const $ = (id) => document.getElementById(id);
+
+    let demoOffset = 0;
+
+    function renderDaily(){
+      const now = new Date();
+      const doy = getDayOfYear(now);
+      const idx = ((doy - 1 + demoOffset) % demoDays.length + demoDays.length) % demoDays.length;
+      const item = demoDays[idx];
+
+      $("dayOfYear").textContent = Math.min(doy, 365);
+      $("todayDate").textContent = now.toLocaleDateString("pt-BR", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+
+      $("dailyPhrase").textContent = item.phrase;
+      $("dailyVerse").textContent = `"${item.verse}"`;
+      $("dailyRef").textContent = item.reference;
+
+      const link = "https://ezequielkardec1-tech.github.io/RITUAL-DIARIO/";
+      const share =
+`Ritual Diário — Dia ${Math.min(doy,365)}
+${item.phrase}
+
+"${item.verse}"
+${item.reference}
+
+Acesse: ${link}`;
+
+      $("waShare").href = "https://wa.me/?text=" + encodeURIComponent(share);
+
+      $("copyDaily").onclick = async () => {
+        try{ await navigator.clipboard.writeText(share); $("copyDaily").textContent="Copiado!"; setTimeout(()=>$("copyDaily").textContent="Copiar texto",1200); }
+        catch(e){ alert("Não consegui copiar automaticamente."); }
+      };
+      $("instaShare").onclick = async () => {
+        try{ await navigator.clipboard.writeText(share); alert("Texto copiado! Cole no Instagram Story e escolha uma imagem de fundo."); }
+        catch(e){ alert("Não consegui copiar automaticamente."); }
+      };
+    }
+
+    $("nextDemo").onclick = () => { demoOffset++; renderDaily(); };
+
+    $("copyRitual").onclick = async () => {
+      const t =
+`Ritual Diário (3–5 min)
+1) Respira 6 vezes (4s entra / 6s sai)
+2) Mão no peito: "Eu volto pra mim."
+3) Faça 1 micro-ação hoje
+4) Afirmação: "Deus guia meus passos. Eu continuo."`;
+      try{ await navigator.clipboard.writeText(t); $("copyRitual").textContent="Copiado!"; setTimeout(()=>$("copyRitual").textContent="Copiar ritual",1200); }
+      catch(e){ alert("Não consegui copiar automaticamente."); }
+    };
+
+    // Quiz
+    const quizForm = $("quizForm");
+    const quizResult = $("quizResult");
+
+    function computeScore(){
+      const data = new FormData(quizForm);
+      let score = 0;
+      for (let i=1;i<=6;i++) score += Number(data.get("q"+i) || 0);
+      return score;
+    }
+    function resultFor(score){
+      if (score <= 9) return { title:"Nível 1 — Despertar Inicial", text:"Você está no começo de uma virada interna. Foque em constância simples: ritual diário e acolhimento emocional." };
+      if (score <= 14) return { title:"Nível 2 — Caminhante Consciente", text:"Você já despertou, mas oscila. Seu próximo passo é estrutura e cura de bloqueios específicos." };
+      return { title:"Nível 3 — Ser de Luz em Expansão", text:"Você está em expansão. Seu próximo passo é aprofundar e sustentar sua vibração com prática diária." };
+    }
+
+    quizForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const score = computeScore();
+      const r = resultFor(score);
+
+      $("resultTitle").textContent = r.title;
+      $("resultScore").textContent = score;
+      $("resultText").textContent = r.text;
+
+      const link = "https://ezequielkardec1-tech.github.io/RITUAL-DIARIO/";
+      const share =
+`Meu resultado no Quiz Ritual Diário:
+${r.title} — ${score}/18
+
+${r.text}
+
+Teste você também: ${link}`;
+
+      $("waShareResult").href = "https://wa.me/?text=" + encodeURIComponent(share);
+
+      $("copyResult").onclick = async () => {
+        try{ await navigator.clipboard.writeText(share); $("copyResult").textContent="Copiado!"; setTimeout(()=>$("copyResult").textContent="Copiar resultado",1200); }
+        catch(e){ alert("Não consegui copiar automaticamente."); }
+      };
+      $("instaShareResult").onclick = async () => {
+        try{ await navigator.clipboard.writeText(share); alert("Texto copiado! Cole no Instagram Story."); }
+        catch(e){ alert("Não consegui copiar automaticamente."); }
+      };
+
+      quizResult.style.display = "block";
+      quizResult.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+
+    $("resetQuiz").onclick = () => { quizForm.reset(); quizResult.style.display = "none"; };
+
+    renderDaily();
+  </script>
+</body>
+</html>
